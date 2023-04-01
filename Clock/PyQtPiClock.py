@@ -414,7 +414,7 @@ def wxfinished_owm():
         '50n': 'fog'
     }
 
-    attribution.setText('OpenWeatherMap.org')
+    #attribution.setText('OpenWeatherMap.org')
     attribution2.setText('OpenWeatherMap.org')
 
     wxstr = str(wxreply.readAll(), 'utf-8')
@@ -2167,12 +2167,13 @@ attribution.setStyleSheet('#attribution { ' +
                           '}')
 attribution.setAlignment(Qt.AlignTop)
 attribution.setGeometry(int(6 * xscale), int(3 * yscale), int(130 * xscale), 100)
-# Weather Now
+# Weather Current
+# Icon Page one
 ypos = -5
 wxicon = QtWidgets.QLabel(foreGround)
 wxicon.setObjectName('wxicon')
 wxicon.setStyleSheet('#wxicon { background-color: transparent; }')
-wxicon.setGeometry(int(25 * xscale), int(ypos * yscale), int(150 * xscale), int(150 * yscale))
+wxicon.setGeometry(int(25 * xscale), int(ypos * yscale), int(135 * xscale), int(150 * yscale))
 
 attribution2 = QtWidgets.QLabel(frame2)
 attribution2.setObjectName('attribution2')
@@ -2186,11 +2187,11 @@ attribution2.setStyleSheet('#attribution2 { ' +
                            '}')
 attribution2.setAlignment(Qt.AlignTop)
 attribution2.setGeometry(int(1 * xscale), int(80 * yscale), int(13 * xscale), 10) #int(1 * xscale), int(880 * yscale), int(130 * xscale), 100)
-
+#Icon Page 2
 wxicon2 = QtWidgets.QLabel(frame2)
 wxicon2.setObjectName('wxicon2')
 wxicon2.setStyleSheet('#wxicon2 { background-color: transparent; }')
-wxicon2.setGeometry(int(0 * xscale), int(750 * yscale), int(150 * xscale), int(150 * yscale))
+wxicon2.setGeometry(int(0 * xscale), int(750 * yscale), int(170 * xscale), int(150 * yscale))
 
 ypos += 130
 wxdesc = QtWidgets.QLabel(foreGround)
@@ -2216,20 +2217,20 @@ wxdesc2.setStyleSheet('#wxdesc2 { background-color: transparent; color: ' +
                       '}')
 wxdesc2.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 wxdesc2.setGeometry(int(400 * xscale), int(800 * yscale), int(400 * xscale), 100)
-
+#Temp page one
 ypos += 25
 temper = QtWidgets.QLabel(foreGround)
 temper.setObjectName('temper')
 temper.setStyleSheet('#temper { background-color: transparent; color: ' +
                      Config.textcolor +
                      '; font-size: ' +
-                     str(int(70 * xscale * Config.fontmult)) +
+                     str(int(35* xscale * Config.fontmult)) +
                      'px; ' +
                      Config.fontattr +
                      '}')
 temper.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-temper.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), int(100 * yscale))
-
+temper.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), int(100 * yscale))
+#Temp Page 2
 temper2 = QtWidgets.QLabel(frame2)
 temper2.setObjectName('temper2')
 temper2.setStyleSheet('#temper2 { background-color: transparent; color: ' +
@@ -2241,46 +2242,46 @@ temper2.setStyleSheet('#temper2 { background-color: transparent; color: ' +
                       '}')
 temper2.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 temper2.setGeometry(int(125 * xscale), int(780 * yscale), int(300 * xscale), 100)
-
+#Pressure Page 1
 ypos += 80
 press = QtWidgets.QLabel(foreGround)
 press.setObjectName('press')
 press.setStyleSheet('#press { background-color: transparent; color: ' +
                     Config.textcolor +
                     '; font-size: ' +
-                    str(int(25 * xscale * Config.fontmult)) +
+                    str(int(15 * xscale * Config.fontmult)) +
                     'px; ' +
                     Config.fontattr +
                     '}')
 press.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-press.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
-
+press.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
+#humidity Page 1
 ypos += 30
 humidity = QtWidgets.QLabel(foreGround)
 humidity.setObjectName('humidity')
 humidity.setStyleSheet('#humidity { background-color: transparent; color: ' +
                        Config.textcolor +
                        '; font-size: ' +
-                       str(int(25 * xscale * Config.fontmult)) +
+                       str(int(15 * xscale * Config.fontmult)) +
                        'px; ' +
                        Config.fontattr +
                        '}')
 humidity.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-humidity.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
-
+humidity.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
+#Wind page 1
 ypos += 30
 wind = QtWidgets.QLabel(foreGround)
 wind.setObjectName('wind')
 wind.setStyleSheet('#wind { background-color: transparent; color: ' +
                    Config.textcolor +
                    '; font-size: ' +
-                   str(int(20 * xscale * Config.fontmult)) +
+                   str(int(10 * xscale * Config.fontmult)) +
                    'px; ' +
                    Config.fontattr +
                    '}')
 wind.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-wind.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
-
+wind.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
+#feels Like Page 1
 ypos += 20
 feelslike = QtWidgets.QLabel(foreGround)
 feelslike.setObjectName('feelslike')
@@ -2292,7 +2293,7 @@ feelslike.setStyleSheet('#feelslike { background-color: transparent; color: ' +
                         Config.fontattr +
                         '}')
 feelslike.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-feelslike.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
+feelslike.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
 
 ypos += 200
 wdate = QtWidgets.QLabel(foreGround)
