@@ -391,6 +391,7 @@ def wxfinished_owm():
     global wind, feelslike, wdate, bottom, forecast
     global wxicon2, temper2, wxdesc2, attribution
     global daytime
+    global alerts
 
     owmicons = {
         '01d': 'clear-day',
@@ -447,7 +448,7 @@ def wxfinished_owm():
             wxdesc2.setText(f['weather'][0]['description'])
 
             if Config.wind_degrees:
-                wd = str(f['wind_deg']) + u'°'
+                wd = str(f['wind_deg']) + u'°' #(f['wind_deg']) + u'°'
             else:
                 wd = bearing(f['wind_deg'])
 
@@ -2106,10 +2107,11 @@ else:
     glow.setColor(QColor(dcolor))
     clockface.setGraphicsEffect(glow)
 
-radar1rect = QtCore.QRect(int(3 * xscale), int(344 * yscale), int(300 * xscale), int(275 * yscale))
+#Radar Size
+radar1rect = QtCore.QRect(int(183 * xscale), int(2* yscale), int(940* xscale), int(470 * yscale))
 objradar1 = Radar(foreGround, Config.radar1, radar1rect, 'radar1')
 
-radar2rect = QtCore.QRect(int(3 * xscale), int(622 * yscale), int(300 * xscale), int(275 * yscale))
+radar2rect = QtCore.QRect(int(183 * xscale), int(475 * yscale), int(940 * xscale), int(470 * yscale))
 objradar2 = Radar(foreGround, Config.radar2, radar2rect, 'radar2')
 
 radar3rect = QtCore.QRect(int(13 * xscale), int(50 * yscale), int(700 * xscale), int(700 * yscale))
@@ -2118,18 +2120,19 @@ objradar3 = Radar(frame2, Config.radar3, radar3rect, 'radar3')
 radar4rect = QtCore.QRect(int(726 * xscale), int(50 * yscale), int(700 * xscale), int(700 * yscale))
 objradar4 = Radar(frame2, Config.radar4, radar4rect, 'radar4')
 
+#Date Page 1
 datex = QtWidgets.QLabel(foreGround)
 datex.setObjectName('datex')
 datex.setStyleSheet('#datex { font-family:sans-serif; color: ' +
                     Config.textcolor +
                     '; background-color: transparent; font-size: ' +
-                    str(int(50 * xscale * Config.fontmult)) +
+                    str(int(1 * xscale * Config.fontmult)) +
                     'px; ' +
                     Config.fontattr +
                     '}')
 datex.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 datex.setGeometry(0, 0, width, int(100 * yscale))
-
+#Date Page 2
 datex2 = QtWidgets.QLabel(frame2)
 datex2.setObjectName('datex2')
 datex2.setStyleSheet('#datex2 { font-family:sans-serif; color: ' +
@@ -2158,18 +2161,18 @@ attribution.setStyleSheet('#attribution { ' +
                           ' background-color: transparent; color: ' +
                           Config.textcolor +
                           '; font-size: ' +
-                          str(int(12 * xscale)) +
+                          str(int(20 * xscale)) +
                           'px; ' +
                           Config.fontattr +
                           '}')
 attribution.setAlignment(Qt.AlignTop)
 attribution.setGeometry(int(6 * xscale), int(3 * yscale), int(130 * xscale), 100)
-
-ypos = -25
+# Weather Now
+ypos = -5
 wxicon = QtWidgets.QLabel(foreGround)
 wxicon.setObjectName('wxicon')
 wxicon.setStyleSheet('#wxicon { background-color: transparent; }')
-wxicon.setGeometry(int(75 * xscale), int(ypos * yscale), int(150 * xscale), int(150 * yscale))
+wxicon.setGeometry(int(25 * xscale), int(ypos * yscale), int(150 * xscale), int(150 * yscale))
 
 attribution2 = QtWidgets.QLabel(frame2)
 attribution2.setObjectName('attribution2')
@@ -2177,12 +2180,12 @@ attribution2.setStyleSheet('#attribution2 { ' +
                            'background-color: transparent; color: ' +
                            Config.textcolor +
                            '; font-size: ' +
-                           str(int(12 * xscale * Config.fontmult)) +
+                           str(int(1 * xscale * Config.fontmult)) +
                            'px; ' +
                            Config.fontattr +
                            '}')
 attribution2.setAlignment(Qt.AlignTop)
-attribution2.setGeometry(int(6 * xscale), int(880 * yscale), int(130 * xscale), 100)
+attribution2.setGeometry(int(1 * xscale), int(80 * yscale), int(13 * xscale), 10) #int(1 * xscale), int(880 * yscale), int(130 * xscale), 100)
 
 wxicon2 = QtWidgets.QLabel(frame2)
 wxicon2.setObjectName('wxicon2')
@@ -2195,13 +2198,13 @@ wxdesc.setObjectName('wxdesc')
 wxdesc.setStyleSheet('#wxdesc { background-color: transparent; color: ' +
                      Config.textcolor +
                      '; font-size: ' +
-                     str(int(30 * xscale)) +
+                     str(int(1 * xscale)) +
                      'px; ' +
                      Config.fontattr +
                      '}')
 wxdesc.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-wxdesc.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
-
+wxdesc.setGeometry(int(300 * xscale), int(ypos * yscale), int(300 * xscale), 100)
+# Weather Page 2
 wxdesc2 = QtWidgets.QLabel(frame2)
 wxdesc2.setObjectName('wxdesc2')
 wxdesc2.setStyleSheet('#wxdesc2 { background-color: transparent; color: ' +
@@ -2291,19 +2294,19 @@ feelslike.setStyleSheet('#feelslike { background-color: transparent; color: ' +
 feelslike.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 feelslike.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
 
-ypos += 20
+ypos += 200
 wdate = QtWidgets.QLabel(foreGround)
 wdate.setObjectName('wdate')
 wdate.setStyleSheet('#wdate { background-color: transparent; color: ' +
                     Config.textcolor +
                     '; font-size: ' +
-                    str(int(15 * xscale * Config.fontmult)) +
+                    str(int(1 * xscale * Config.fontmult)) +
                     'px; ' +
                     Config.fontattr +
                     '}')
 wdate.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 wdate.setGeometry(int(3 * xscale), int(ypos * yscale), int(300 * xscale), 100)
-
+# Bottom Sun and Moon
 bottom = QtWidgets.QLabel(foreGround)
 bottom.setObjectName('bottom')
 bottom.setStyleSheet('#bottom { font-family:sans-serif; color: ' +
@@ -2313,7 +2316,7 @@ bottom.setStyleSheet('#bottom { font-family:sans-serif; color: ' +
                      'px; ' +
                      Config.fontattr +
                      '}')
-bottom.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+bottom.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
 
 temp = QtWidgets.QLabel(foreGround)
@@ -2321,42 +2324,44 @@ temp.setObjectName('temp')
 temp.setStyleSheet('#temp { font-family:sans-serif; color: ' +
                    Config.textcolor +
                    '; background-color: transparent; font-size: ' +
-                   str(int(30 * xscale * Config.fontmult)) +
+                   str(int(3 * xscale * Config.fontmult)) +
                    'px; ' +
                    Config.fontattr +
                    '}')
 temp.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-temp.setGeometry(0, int(height - 100 * yscale), width, int(50 * yscale))
+temp.setGeometry(10, int(height - 35 * yscale), width, int(50 * yscale))
+
 
 forecast = []
 for i in range(0, 9):
     lab = QtWidgets.QLabel(foreGround)
     lab.setObjectName('forecast' + str(i))
+# Day Name Size in forecast box    
     lab.setStyleSheet('QWidget { background-color: transparent; color: ' +
                       Config.textcolor +
                       '; font-size: ' +
-                      str(int(20 * xscale * Config.fontmult)) +
+                      str(int(15 * xscale * Config.fontmult)) +
                       'px; ' +
                       Config.fontattr +
                       '}')
     lab.setGeometry(int(1137 * xscale), int(i * 100 * yscale), int(300 * xscale), int(100 * yscale))
-
+#Forcast Box
     icon = QtWidgets.QLabel(lab)
     icon.setStyleSheet('#icon { background-color: transparent; }')
-    icon.setGeometry(0, 0, int(100 * xscale), int(100 * yscale))
+    icon.setGeometry(0, 0, int(80 * xscale), int(80 * yscale))
     icon.setObjectName('icon')
-
+# Forcast Loacton
     wx = QtWidgets.QLabel(lab)
     wx.setStyleSheet('#wx { background-color: transparent; }')
-    wx.setGeometry(int(100 * xscale), int(5 * yscale), int(200 * xscale), int(120 * yscale))
-    wx.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+    wx.setGeometry(int(90 * xscale), int(5 * yscale), int(200 * xscale), int(120 * yscale)) #(100 * xscale), int(5 * yscale), int(200 * xscale), int(120 * yscale))
+    wx.setAlignment(Qt.AlignRight | Qt.AlignTop)
     wx.setWordWrap(True)
     wx.setObjectName('wx')
-
+# Day Location of FOrcast Boxes
     day = QtWidgets.QLabel(lab)
     day.setStyleSheet('#day { background-color: transparent; }')
-    day.setGeometry(int(100 * xscale), int(75 * yscale), int(200 * xscale), int(25 * yscale))
-    day.setAlignment(Qt.AlignRight | Qt.AlignBottom)
+    day.setGeometry(int(5 * xscale), int(75 * yscale), int(200 * xscale), int(25 * yscale)) #(100 * xscale), int(75 * yscale), int(200 * xscale), int(25 * yscale))
+    day.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
     day.setObjectName('day')
 
     forecast.append(lab)
