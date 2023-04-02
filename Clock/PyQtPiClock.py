@@ -269,6 +269,7 @@ def tick():
                        '{0:%H:%M}'.format(sunset))
         bottomtext += (Config.LMoonPhase + phase(moon_phase()))
         bottom.setText(bottomtext)
+        
 
 
 def tempfinished():
@@ -981,7 +982,7 @@ def feels_like(f):
 def wxfinished_metar():
     global metarreply
     global wxicon, temper, wxdesc, press, humidity
-    global wind, feelslike, wdate, bottom
+    global wind, feelslike, wdate, bottom, bottom2
     global wxicon2, temper2, wxdesc2
     global daytime
 
@@ -2218,13 +2219,13 @@ wxdesc2.setStyleSheet('#wxdesc2 { background-color: transparent; color: ' +
 wxdesc2.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 wxdesc2.setGeometry(int(400 * xscale), int(800 * yscale), int(400 * xscale), 100)
 #Temp page one
-ypos += 25
+ypos += 25 #25
 temper = QtWidgets.QLabel(foreGround)
 temper.setObjectName('temper')
 temper.setStyleSheet('#temper { background-color: transparent; color: ' +
                      Config.textcolor +
                      '; font-size: ' +
-                     str(int(35* xscale * Config.fontmult)) +
+                     str(int(38* xscale * Config.fontmult)) +
                      'px; ' +
                      Config.fontattr +
                      '}')
@@ -2242,8 +2243,23 @@ temper2.setStyleSheet('#temper2 { background-color: transparent; color: ' +
                       '}')
 temper2.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 temper2.setGeometry(int(125 * xscale), int(780 * yscale), int(300 * xscale), 100)
+
+ypos += 50
+feelslike = QtWidgets.QLabel(foreGround)
+feelslike.setObjectName('feelslike')
+feelslike.setStyleSheet('#feelslike { background-color: transparent; color: ' +
+                        Config.textcolor +
+                        '; font-size: ' +
+                        str(int(20 * xscale * Config.fontmult)) +
+                        'px; ' +
+                        Config.fontattr +
+                        '}')
+feelslike.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+feelslike.setGeometry(int(3* xscale), int(ypos * yscale), int(170 * xscale), 100) #ypos += 60 #80
+
+# break
 #Pressure Page 1
-ypos += 80
+ypos += 30
 press = QtWidgets.QLabel(foreGround)
 press.setObjectName('press')
 press.setStyleSheet('#press { background-color: transparent; color: ' +
@@ -2256,7 +2272,7 @@ press.setStyleSheet('#press { background-color: transparent; color: ' +
 press.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 press.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
 #humidity Page 1
-ypos += 30
+ypos += 20 #30
 humidity = QtWidgets.QLabel(foreGround)
 humidity.setObjectName('humidity')
 humidity.setStyleSheet('#humidity { background-color: transparent; color: ' +
@@ -2269,33 +2285,22 @@ humidity.setStyleSheet('#humidity { background-color: transparent; color: ' +
 humidity.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 humidity.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
 #Wind page 1
-ypos += 30
+ypos += 20 #30
 wind = QtWidgets.QLabel(foreGround)
 wind.setObjectName('wind')
 wind.setStyleSheet('#wind { background-color: transparent; color: ' +
                    Config.textcolor +
                    '; font-size: ' +
-                   str(int(10 * xscale * Config.fontmult)) +
+                   str(int(12 * xscale * Config.fontmult)) +
                    'px; ' +
                    Config.fontattr +
                    '}')
 wind.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 wind.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
 #feels Like Page 1
-ypos += 20
-feelslike = QtWidgets.QLabel(foreGround)
-feelslike.setObjectName('feelslike')
-feelslike.setStyleSheet('#feelslike { background-color: transparent; color: ' +
-                        Config.textcolor +
-                        '; font-size: ' +
-                        str(int(20 * xscale * Config.fontmult)) +
-                        'px; ' +
-                        Config.fontattr +
-                        '}')
-feelslike.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-feelslike.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100)
 
-ypos += 200
+
+ypos += 20#200
 wdate = QtWidgets.QLabel(foreGround)
 wdate.setObjectName('wdate')
 wdate.setStyleSheet('#wdate { background-color: transparent; color: ' +
@@ -2313,13 +2318,14 @@ bottom.setObjectName('bottom')
 bottom.setStyleSheet('#bottom { font-family:sans-serif; color: ' +
                      Config.textcolor +
                      '; background-color: transparent; font-size: ' +
-                     str(int(30 * xscale * Config.fontmult)) +
+                     str(int(12 * xscale * Config.fontmult)) +
                      'px; ' +
                      Config.fontattr +
                      '}')
-bottom.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
-
+bottom.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+bottom.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+bottom.setWordWrap(True)
+#Temp
 temp = QtWidgets.QLabel(foreGround)
 temp.setObjectName('temp')
 temp.setStyleSheet('#temp { font-family:sans-serif; color: ' +
@@ -2358,7 +2364,7 @@ for i in range(0, 9):
     wx.setAlignment(Qt.AlignRight | Qt.AlignTop)
     wx.setWordWrap(True)
     wx.setObjectName('wx')
-# Day Location of FOrcast Boxes
+# Day Location of Forcast Boxes
     day = QtWidgets.QLabel(lab)
     day.setStyleSheet('#day { background-color: transparent; }')
     day.setGeometry(int(5 * xscale), int(75 * yscale), int(200 * xscale), int(25 * yscale)) #(100 * xscale), int(75 * yscale), int(200 * xscale), int(25 * yscale))
