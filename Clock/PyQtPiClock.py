@@ -11,6 +11,7 @@ import signal
 import sys
 import time
 import traceback
+import csv
 from subprocess import Popen
 
 import dateutil.parser
@@ -392,7 +393,7 @@ def wxfinished_owm():
     global wind, feelslike, wdate, bottom, forecast
     global wxicon2, temper2, wxdesc2, attribution
     global daytime
-    global alerts
+    global alerts_event, alerts_ends, alerts_event2, alerts_ends2, alerts_event3, alerts_ends3, alerts_event4, alerts_ends4
 
     owmicons = {
         '01d': 'clear-day',
@@ -414,6 +415,10 @@ def wxfinished_owm():
         '13n': 'snow',
         '50n': 'fog'
     }
+    
+    # Use to shade background for NWS alerts tile
+    # Color is based off of event
+    nws_colors=list(csv.DictReader(open("nws_colors.csv")))
 
     #attribution.setText('OpenWeatherMap.org')
     attribution2.setText('OpenWeatherMap.org')
@@ -575,6 +580,70 @@ def wxfinished_owm():
 
             wx.setStyleSheet('#wx { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; }')
             wx.setText(f['weather'][0]['description'] + '\n' + s)
+            
+            # Get alerts if any
+            # Test alert
+            alerts={
+                    "sender_name": "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
+                    "event": "Severe Thunderstorm Warning",
+                    "start": 1646344800,
+                    "end": 1646380800,
+                    "description": "...SMALL CRAFT ADVISORY REMAINS IN EFFECT FROM 5 PM THIS\nAFTERNOON TO 3 AM EST FRIDAY...\n* WHAT...North winds 15 to 20 kt with gusts up to 25 kt and seas\n3 to 5 ft expected.\n* WHERE...Coastal waters from Little Egg Inlet to Great Egg\nInlet NJ out 20 nm, Coastal waters from Great Egg Inlet to\nCape May NJ out 20 nm and Coastal waters from Manasquan Inlet\nto Little Egg Inlet NJ out 20 nm.\n* WHEN...From 5 PM this afternoon to 3 AM EST Friday.\n* IMPACTS...Conditions will be hazardous to small craft.",
+                    "tags": []
+                    }
+    
+            if 'alerts' in wxdata:
+            #if True:
+                print("Active weather alerts in your location")
+                f = wxdata['alerts']
+                print("Number of alerts is: {0}".format(len(f)))
+                print(f)
+                for row in range(len(nws_colors)):
+                    if nws_colors[row]['Event'] == f[0]['event']:
+                        colorstr = nws_colors[row]['Color']
+                        (r,g,b)= map(int, colorstr.split(','))
+                        break
+                    else:
+                        (r,g,b) = (0,0,0)
+                        
+                wx_alertcolor=QColor(r,g,b)
+                             
+                alerts_event.setStyleSheet('#alerts_event { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; background-color: ' + wx_alertcolor.name() + ';}')   
+                alerts_event.setText(f[0]['event'])
+                
+                # Get the alert end time and convert to readble format
+                
+                warn_datetime = datetime.datetime.fromtimestamp(f[0]['end'])
+                wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
+                
+                alerts_ends.setStyleSheet('#alerts_ends { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: transparent;}')   
+                alerts_ends.setText("Expires @ " + wx_alert_time)
+                
+                
+                
+                
+            else:
+                print("No active weather alerts in your location")
+                alerts_event.setStyleSheet('#alerts_event { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ;background-color: red;}')   
+                alerts_event.setText("No active alerts")
+                alerts_ends.setStyleSheet('#alerts_ends { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
+                alerts_ends.setText("Expires @ ----")
+                alerts_event2.setStyleSheet('#alerts_event2 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ; background-color: orange;}')   
+                alerts_event2.setText("No active alerts")
+                alerts_ends2.setStyleSheet('#alerts_ends2 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
+                alerts_ends2.setText("Expires @ ----")
+                alerts_event3.setStyleSheet('#alerts_event3 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ;background-color: yellow;}')   
+                alerts_event3.setText("No active alerts")
+                alerts_ends3.setStyleSheet('#alerts_ends3 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
+                alerts_ends3.setText("Expires @ ----")
+                alerts_event4.setStyleSheet('#alerts_event4 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ;background-color: blue;}')   
+                alerts_event4.setText("No active alerts")
+                alerts_ends4.setStyleSheet('#alerts_ends4 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
+                alerts_ends4.setText("Expires @ ----")
+            
+            
+            
+            
     except NameError:  # if there is a JSONDecodeError on first run, wxdata may be undefined
         pass # ignore and try again on the next refresh
 
@@ -2325,6 +2394,124 @@ bottom.setStyleSheet('#bottom { font-family:sans-serif; color: ' +
 bottom.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
 bottom.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
 bottom.setWordWrap(True)
+
+# Alerts_event
+ypos+=187
+alerts_event = QtWidgets.QLabel(foreGround)
+alerts_event.setObjectName('alerts_event')
+alerts_event.setStyleSheet('#alerts_event { font-family:sans-serif; color: ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(12 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_event.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_event.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_event.setWordWrap(True)
+
+ypos+=75
+alerts_ends = QtWidgets.QLabel(foreGround)
+alerts_ends.setObjectName('alerts_ends')
+alerts_ends.setStyleSheet('#alerts_ends { font-family:sans-serif; color: ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(5 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_ends.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_ends.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 40) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_ends.setWordWrap(True)
+
+
+#Alerts_event2
+ypos+=35
+alerts_event2 = QtWidgets.QLabel(foreGround)
+alerts_event2.setObjectName('alerts_event2')
+alerts_event2.setStyleSheet('#alerts_event2 { font-family:sans-serif; color: ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(12 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_event2.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_event2.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_event2.setWordWrap(True)
+
+ypos+=75
+alerts_ends2 = QtWidgets.QLabel(foreGround)
+alerts_ends2.setObjectName('alerts_ends2')
+alerts_ends2.setStyleSheet('#alerts_ends2 { font-family:sans-serif; color: ' +
+                     Config.textcolor +
+                     '; background-color: trasparent; font-size: ' +
+                     str(int(5 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_ends2.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_ends2.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 40) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_ends2.setWordWrap(True)
+
+#Alerts_event3
+ypos+=35
+alerts_event3 = QtWidgets.QLabel(foreGround)
+alerts_event3.setObjectName('alerts_event3')
+alerts_event3.setStyleSheet('#alerts_event3 { font-family:sans-serif; ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(12 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_event3.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_event3.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_event3.setWordWrap(True)
+
+ypos+=75
+alerts_ends3 = QtWidgets.QLabel(foreGround)
+alerts_ends3.setObjectName('alerts_ends3')
+alerts_ends3.setStyleSheet('#alerts_ends3 { font-family:sans-serif; color: ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(5 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_ends3.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_ends3.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 40) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_ends3.setWordWrap(True)
+
+#Alerts_event4
+ypos+=35
+alerts_event4= QtWidgets.QLabel(foreGround)
+alerts_event4.setObjectName('alerts_event4')
+alerts_event4.setStyleSheet('#alerts_event4 { font-family:sans-serif; ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(12 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_event4.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_event4.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 100) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_event4.setWordWrap(True)
+
+ypos+=75
+alerts_ends4 = QtWidgets.QLabel(foreGround)
+alerts_ends4.setObjectName('alerts_ends4')
+alerts_ends4.setStyleSheet('#alerts_ends4 { font-family:sans-serif; color: ' +
+                     Config.textcolor +
+                     '; background-color: transparent; font-size: ' +
+                     str(int(5 * xscale * Config.fontmult)) +
+                     'px; ' +
+                     Config.fontattr +
+                     '}')
+alerts_ends4.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
+alerts_ends4.setGeometry(int(3 * xscale), int(ypos * yscale), int(170 * xscale), 40) #bottom.setGeometry(0, int(height - 50 * yscale), width, int(50 * yscale))
+alerts_ends4.setWordWrap(True)
+
 #Temp
 temp = QtWidgets.QLabel(foreGround)
 temp.setObjectName('temp')
