@@ -582,66 +582,75 @@ def wxfinished_owm():
             wx.setText(f['weather'][0]['description'] + '\n' + s)
             
             # Get alerts if any
-            # Test alert
-            alerts={
-                    "sender_name": "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
-                    "event": "Severe Thunderstorm Warning",
-                    "start": 1646344800,
-                    "end": 1646380800,
-                    "description": "...SMALL CRAFT ADVISORY REMAINS IN EFFECT FROM 5 PM THIS\nAFTERNOON TO 3 AM EST FRIDAY...\n* WHAT...North winds 15 to 20 kt with gusts up to 25 kt and seas\n3 to 5 ft expected.\n* WHERE...Coastal waters from Little Egg Inlet to Great Egg\nInlet NJ out 20 nm, Coastal waters from Great Egg Inlet to\nCape May NJ out 20 nm and Coastal waters from Manasquan Inlet\nto Little Egg Inlet NJ out 20 nm.\n* WHEN...From 5 PM this afternoon to 3 AM EST Friday.\n* IMPACTS...Conditions will be hazardous to small craft.",
-                    "tags": []
-                    }
-    
+            
             if 'alerts' in wxdata:
-            #if True:
                 print("Active weather alerts in your location")
                 f = wxdata['alerts']
-                print("Number of alerts is: {0}".format(len(f)))
-                print(f)
-                for row in range(len(nws_colors)):
-                    if nws_colors[row]['Event'] == f[0]['event']:
-                        colorstr = nws_colors[row]['Color']
-                        (r,g,b)= map(int, colorstr.split(','))
-                        break
-                    else:
-                        (r,g,b) = (0,0,0)
+                num_alerts = len(f)
+                print("Number of alerts is: {0}".format(num_alerts))
+                
+                #Loop over up to 4 alerts and break out if we hit number of alerts before 4
+                for x in range(4):
+                    if x == num_alerts: break
+                    for row in range(len(nws_colors)):
+                        if nws_colors[row]['Event'] == f[x]['event']:
+                            colorstr = nws_colors[row]['Color']
+                            (r,g,b)= map(int, colorstr.split(','))
+                            break
+                        else:
+                            (r,g,b) = (0,0,0)
+                            
+                    wx_alertcolor=QColor(r,g,b)
+                     
+                    if x == 0:            
+                        alerts_event.setStyleSheet('#alerts_event { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: ' + wx_alertcolor.name() + ';}')   
+                        alerts_event.setText(f[x]['event'])
                         
-                wx_alertcolor=QColor(r,g,b)
-                             
-                alerts_event.setStyleSheet('#alerts_event { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; background-color: ' + wx_alertcolor.name() + ';}')   
-                alerts_event.setText(f[0]['event'])
-                
-                # Get the alert end time and convert to readble format
-                
-                warn_datetime = datetime.datetime.fromtimestamp(f[0]['end'])
-                wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
-                
-                alerts_ends.setStyleSheet('#alerts_ends { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: transparent;}')   
-                alerts_ends.setText("Expires @ " + wx_alert_time)
-                
-                
-                
+                        # Get the alert end time and convert to readble format
+                        
+                        warn_datetime = datetime.datetime.fromtimestamp(f[x]['end'])
+                        wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
+                        
+                        alerts_ends.setStyleSheet('#alerts_ends { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: transparent;}')   
+                        alerts_ends.setText("Expires @ " + wx_alert_time)
+                    elif x == 1:
+                        alerts_event2.setStyleSheet('#alerts_event2 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: ' + wx_alertcolor.name() + ';}')   
+                        alerts_event2.setText(f[x]['event'])
+                        
+                        # Get the alert end time and convert to readble format
+                        
+                        warn_datetime = datetime.datetime.fromtimestamp(f[x]['end'])
+                        wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
+                        
+                        alerts_ends2.setStyleSheet('#alerts_ends2 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: transparent;}')   
+                        alerts_ends2.setText("Expires @ " + wx_alert_time)
+                    elif x == 2:
+                        alerts_event3.setStyleSheet('#alerts_event3 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: ' + wx_alertcolor.name() + ';}')   
+                        alerts_event3.setText(f[x]['event'])
+                        
+                        # Get the alert end time and convert to readble format
+                        
+                        warn_datetime = datetime.datetime.fromtimestamp(f[x]['end'])
+                        wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
+                        
+                        alerts_ends3.setStyleSheet('#alerts_ends3 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: transparent;}')   
+                        alerts_ends3.setText("Expires @ " + wx_alert_time)
+                    elif x == 3:
+                        alerts_event4.setStyleSheet('#alerts_event4 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: ' + wx_alertcolor.name() + ';}')   
+                        alerts_event4.setText(f[x]['event'])
+                        
+                        # Get the alert end time and convert to readble format
+                        
+                        warn_datetime = datetime.datetime.fromtimestamp(f[x]['end'])
+                        wx_alert_time = warn_datetime.strftime("%m/%d %I:%M %p")
+                        
+                        alerts_ends4.setStyleSheet('#alerts_ends4 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; color: #000000; background-color: transparent;}')   
+                        alerts_ends4.setText("Expires @ " + wx_alert_time)            
                 
             else:
                 print("No active weather alerts in your location")
-                alerts_event.setStyleSheet('#alerts_event { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ;background-color: red;}')   
+                alerts_event.setStyleSheet('#alerts_event { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px;  background-color: transparent;}')   
                 alerts_event.setText("No active alerts")
-                alerts_ends.setStyleSheet('#alerts_ends { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
-                alerts_ends.setText("Expires @ ----")
-                alerts_event2.setStyleSheet('#alerts_event2 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ; background-color: orange;}')   
-                alerts_event2.setText("No active alerts")
-                alerts_ends2.setStyleSheet('#alerts_ends2 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
-                alerts_ends2.setText("Expires @ ----")
-                alerts_event3.setStyleSheet('#alerts_event3 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ;background-color: yellow;}')   
-                alerts_event3.setText("No active alerts")
-                alerts_ends3.setStyleSheet('#alerts_ends3 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
-                alerts_ends3.setText("Expires @ ----")
-                alerts_event4.setStyleSheet('#alerts_event4 { font-size: ' + str(int(19 * xscale * Config.fontmult)) + 'px; color: #000000 ;background-color: blue;}')   
-                alerts_event4.setText("No active alerts")
-                alerts_ends4.setStyleSheet('#alerts_ends4 { font-size: ' + str(int(14 * xscale * Config.fontmult)) + 'px; background-color: black;}')   
-                alerts_ends4.setText("Expires @ ----")
-            
-            
             
             
     except NameError:  # if there is a JSONDecodeError on first run, wxdata may be undefined
