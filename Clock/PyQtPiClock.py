@@ -2178,13 +2178,14 @@ else:
         'px; ' +
         Config.fontattr +
         '}')
-    clockface.setAlignment(Qt.AlignCenter)
-    clockface.setGeometry(clockrect)
-    glow = QtWidgets.QGraphicsDropShadowEffect()
-    glow.setOffset(0)
-    glow.setBlurRadius(50)
-    glow.setColor(QColor(dcolor))
-    clockface.setGraphicsEffect(glow)
+ #Clock Location
+    clockface.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+    clockface.setGeometry(int(0 * xscale), int(325 * yscale), int(175 * xscale), 60)
+    #glow = QtWidgets.QGraphicsDropShadowEffect()
+    #glow.setOffset(0)
+    #glow.setBlurRadius(50)
+    #glow.setColor(QColor(dcolor))
+    #clockface.setGraphicsEffect(glow)
 
 #Radar Size
 radar1rect = QtCore.QRect(int(183 * xscale), int(2* yscale), int(940* xscale), int(470 * yscale))
@@ -2205,12 +2206,12 @@ datex.setObjectName('datex')
 datex.setStyleSheet('#datex { font-family:sans-serif; color: ' +
                     Config.textcolor +
                     '; background-color: transparent; font-size: ' +
-                    str(int(1 * xscale * Config.fontmult)) +
+                    str(int(15 * xscale * Config.fontmult)) +
                     'px; ' +
                     Config.fontattr +
                     '}')
 datex.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-datex.setGeometry(0, 0, width, int(100 * yscale))
+datex.setGeometry(int(0 * xscale), int(374 * yscale), int(175 * xscale), 50)
 #Date Page 2
 datex2 = QtWidgets.QLabel(frame2)
 datex2.setObjectName('datex2')
