@@ -173,42 +173,57 @@ Lcc_code_map = {
 # primary_location,
 # -TO-
 # LatLng(44.9764016,-93.2486732),
-radar1 = {
-    'center': LatLng(42.965307,-98.253310),  # the center of your radar block
-    'zoom': 5,  # this is a maps zoom factor, bigger = smaller area
+
+radar2 = {
+    'center': LatLng(42.665307,-91.117095),  # the center of your radar block
+    'zoom': 8,  # this is a maps zoom factor, bigger = smaller area
     'basemap': map_base,  # Mapbox style for standard map or custom map with land and water only
     'overlay': map_overlay,  # Mapbox style for labels, roads, and borders only
-    'color': 7,  # rainviewer radar color style:
+    'color': 4,  # rainviewer radar color style:
     # https://www.rainviewer.com/api.html#colorSchemes
     'smooth': 1,  # rainviewer radar smoothing
     'snow': 1,  # rainviewer radar show snow as different color
     'markers': (  # google maps markers can be overlaid
         {
             'visible': 1,  # 0 = hide marker, 1 = show marker
-            'location': primary_location,
+            'location': LatLng (42.965336,-88.253354),
             'color': 'red',
             'size': 'small',
-            'image': 'teardrop-dot',  # optional image from the markers folder
-        },  # dangling comma is on purpose.
+            'image': 'teardrop-dot', 
+        }, 
+        {
+            'visible': 1, 
+            'location': LatLng (42.025425,-93.646027),
+            'color': 'blue',
+            'size': 'small',
+            'image': 'teardrop-dot',
+        },  # dangling comma is on purpose. # optional image from the markers folder
     )
 }
 
-radar2 = {
-    'center': LatLng(42.956307,-90.253310),
-    'zoom': 8,
+radar1 = {
+    'center': LatLng(42.942349,-95.21535),
+    'zoom': 6,
     'basemap': map_base,
     'overlay': map_overlay,
-    'color': 7,
+    'color': 4,
     'smooth': 1,
     'snow': 1,
     'markers': (
         {
-            'visible': 1,
-            'location': primary_location,
+            'visible': 1,  # 0 = hide marker, 1 = show marker
+            'location': LatLng (42.965336,-88.253354),
             'color': 'red',
             'size': 'small',
-            'image': 'teardrop-dot',
+            'image': 'teardrop-dot', 
         },
+        {
+            'visible': 1, 
+            'location': LatLng (42.025425,-93.646027),
+            'color': 'blue',
+            'size': 'small',
+            'image': 'teardrop-dot',
+        },  # dangling comma is on purpose. # optional image from the markers folder
     )
 }
 
